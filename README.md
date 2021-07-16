@@ -1,70 +1,182 @@
-# Getting Started with Create React App
+# React Basic Guide
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Create a React App
 
-## Available Scripts
+```
+npx create-react-app <my-react-app-name>
+```
 
-In the project directory, you can run:
+## Storybook Setup
 
-### `yarn start`
+Make sure you `cd` into your React project and run 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+npx sb init
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Make sure you add this to the `package.json` after the `private: true,` line
 
-### `yarn test`
+```json
+"resolutions": {
+  "babel-loader": "8.1.0"
+},
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Run the storybook using the command
 
-### `yarn build`
+```
+npm run storybook
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Also, make sure you can run your react app by using the command
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+npm run start
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Remove the `stories` folder from the `src` folder as these are sample stories and you will later add your own stories in your react project. Stop your storybook `ctrl + c` and re-run `npm run storybook`
 
-### `yarn eject`
+## Remove the Boilerplate React Code
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+**1. index.js**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Replace it with this
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```javascript
+import React from "react";
+import ReactDOM from "react-dom";
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+import App from "./App";
 
-## Learn More
+import "./index.css";
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
+);
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**2. App.js**
 
-### Code Splitting
+Replace it with this
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```javascript
+import "./App.css";
 
-### Analyzing the Bundle Size
+const App = () => {
+  return (
+    <div>
+      <h1>My App Goes Here</h1>
+    </div>
+  );
+};
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+export default App;
+```
 
-### Making a Progressive Web App
+**3. App.css | index.css**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Clear the contents of these files but do not delete them as you can add your custom `css` here
 
-### Advanced Configuration
+**4. logo.svg | reportWebVitals.js | setupTests.js | App.test.js**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Delete all these files
 
-### Deployment
+## Files and Folder Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- `src/components` - this is where all your components are stored
+- `src/components/MyComponentName` - each component should start with a Uppercase letter and could have the following files:
+  - `src/components/MyComponentName/index.js` - all the component code which is required
+  - `src/components/MyComponentName/MyComponentName.stories.js` - the story for the component is in this file which will show up in the storybook
+  - `src/components/MyComponentName/MyComponentName.css` - all the component styles are defined in this file
 
-### `yarn build` fails to minify
+## Basic Component Structure
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Add the following code to any newly created component `src/components/MyComponentName/index.js`
+
+```
+const MyComponentName = (props) => {
+  return <div></div>
+}
+
+export default MyComponentName
+```
+
+## Basic Story Structure
+
+Add the following code to any newly created story `src/components/MyComponentName/MyComponentName.stories.js`
+
+```javascript
+import React from "react";
+
+import MyComponentName from ".";
+
+export default {
+  title: "Components/MyComponentName",
+  component: MyComponentName,
+};
+
+export const MyComponentNameStory = (props) => <MyComponentName {...props} />;
+
+MyComponentNameStory.args = {
+  /** props here if any see sample below:
+    propName: value
+  */
+};
+```
+
+### Adding Multiple Sub-Stories to a Story
+
+Add the following code to any newly created story `src/components/MyComponentName/MyComponentName.stories.js`
+
+```javascript
+import React from "react";
+
+import MyComponentName from ".";
+
+export default {
+  title: "Components/MyComponentName",
+  component: MyComponentName,
+};
+
+export const MyComponentNameStory1 = (props) => <MyComponentName {...props} />;
+export const MyComponentNameStory2 = (props) => <MyComponentName {...props} />;
+
+MyComponentNameStory1.args = {
+  /** props here if any for story 1 see sample below:
+    propName: value
+  */
+};
+
+MyComponentNameStory2.args = {
+  /** props here if any for story 2 see sample below:
+    propName: value
+  */
+};
+```
+
+## Adding Styles to our Components
+
+Add any custom css t your styles file within your component directory `src/components/MyComponentName/MyComponentName.css`
+
+Add styles like any other `.css` file like sample shown below:
+
+```
+.myClassName {
+  color: #4d4d4d
+}
+```
+
+Then make sure you import your `src/components/MyComponentName/MyComponentName.css` file in to the component file `src/components/MyComponentName/index.js` like this:
+
+```
+import "./MyComponentName.css"
+```
+
+Then you can now use the classnames from the `.css` file in your component file like this:
+
+```
+<div className="myClassName"></div>
+```
